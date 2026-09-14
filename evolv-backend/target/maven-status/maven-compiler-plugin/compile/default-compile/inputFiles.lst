@@ -1,0 +1,17 @@
+C:\Users\Pichau\Documents\PFC- EVOLV\evolv-entrega-14-09\evolv-entrega\evolv-backend\src\main\java\com\evolv\categoria\Categoria.java
+C:\Users\Pichau\Documents\PFC- EVOLV\evolv-entrega-14-09\evolv-entrega\evolv-backend\src\main\java\com\evolv\categoria\CategoriaController.java
+C:\Users\Pichau\Documents\PFC- EVOLV\evolv-entrega-14-09\evolv-entrega\evolv-backend\src\main\java\com\evolv\categoria\CategoriaRepository.java
+C:\Users\Pichau\Documents\PFC- EVOLV\evolv-entrega-14-09\evolv-entrega\evolv-backend\src\main\java\com\evolv\categoria\CategoriaService.java
+C:\Users\Pichau\Documents\PFC- EVOLV\evolv-entrega-14-09\evolv-entrega\evolv-backend\src\main\java\com\evolv\categoria\dto\CategoriaRequest.java
+C:\Users\Pichau\Documents\PFC- EVOLV\evolv-entrega-14-09\evolv-entrega\evolv-backend\src\main\java\com\evolv\config\CorsConfig.java
+C:\Users\Pichau\Documents\PFC- EVOLV\evolv-entrega-14-09\evolv-entrega\evolv-backend\src\main\java\com\evolv\config\GlobalExceptionHandler.java
+C:\Users\Pichau\Documents\PFC- EVOLV\evolv-entrega-14-09\evolv-entrega\evolv-backend\src\main\java\com\evolv\EvolvBackendApplication.java
+C:\Users\Pichau\Documents\PFC- EVOLV\evolv-entrega-14-09\evolv-entrega\evolv-backend\src\main\java\com\evolv\quiz\Alternativa.java
+C:\Users\Pichau\Documents\PFC- EVOLV\evolv-entrega-14-09\evolv-entrega\evolv-backend\src\main\java\com\evolv\quiz\dto\AlternativaRequest.java
+C:\Users\Pichau\Documents\PFC- EVOLV\evolv-entrega-14-09\evolv-entrega\evolv-backend\src\main\java\com\evolv\quiz\dto\QuestaoRequest.java
+C:\Users\Pichau\Documents\PFC- EVOLV\evolv-entrega-14-09\evolv-entrega\evolv-backend\src\main\java\com\evolv\quiz\dto\QuizRequest.java
+C:\Users\Pichau\Documents\PFC- EVOLV\evolv-entrega-14-09\evolv-entrega\evolv-backend\src\main\java\com\evolv\quiz\Questao.java
+C:\Users\Pichau\Documents\PFC- EVOLV\evolv-entrega-14-09\evolv-entrega\evolv-backend\src\main\java\com\evolv\quiz\Quiz.java
+C:\Users\Pichau\Documents\PFC- EVOLV\evolv-entrega-14-09\evolv-entrega\evolv-backend\src\main\java\com\evolv\quiz\QuizController.java
+C:\Users\Pichau\Documents\PFC- EVOLV\evolv-entrega-14-09\evolv-entrega\evolv-backend\src\main\java\com\evolv\quiz\QuizRepository.java
+C:\Users\Pichau\Documents\PFC- EVOLV\evolv-entrega-14-09\evolv-entrega\evolv-backend\src\main\java\com\evolv\quiz\QuizService.java

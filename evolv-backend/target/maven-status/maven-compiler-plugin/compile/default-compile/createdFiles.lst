@@ -1,0 +1,17 @@
+com\evolv\categoria\CategoriaService.class
+com\evolv\quiz\QuizRepository.class
+com\evolv\config\GlobalExceptionHandler.class
+com\evolv\quiz\QuizController.class
+com\evolv\quiz\Alternativa.class
+com\evolv\categoria\CategoriaController.class
+com\evolv\quiz\dto\QuizRequest.class
+com\evolv\quiz\dto\QuestaoRequest.class
+com\evolv\quiz\QuizService.class
+com\evolv\quiz\Quiz.class
+com\evolv\config\CorsConfig.class
+com\evolv\categoria\Categoria.class
+com\evolv\EvolvBackendApplication.class
+com\evolv\categoria\CategoriaRepository.class
+com\evolv\quiz\dto\AlternativaRequest.class
+com\evolv\categoria\dto\CategoriaRequest.class
+com\evolv\quiz\Questao.class
