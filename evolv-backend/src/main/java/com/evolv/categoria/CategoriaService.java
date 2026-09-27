@@ -1,5 +1,6 @@
 package com.evolv.categoria;
 
+import com.evolv.auditoria.AuditoriaService;
 import com.evolv.categoria.dto.CategoriaRequest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -14,9 +15,11 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 public class CategoriaService {
 
     private final CategoriaRepository repository;
+    private final AuditoriaService auditoriaService;
 
-    public CategoriaService(CategoriaRepository repository) {
+    public CategoriaService(CategoriaRepository repository, AuditoriaService auditoriaService) {
         this.repository = repository;
+        this.auditoriaService = auditoriaService;
     }
 
     public List<Categoria> listarTodas() {
@@ -33,7 +36,10 @@ public class CategoriaService {
             throw new ResponseStatusException(CONFLICT, "Já existe uma categoria com esse nome.");
         }
         Categoria categoria = new Categoria(request.getNome(), request.getDescricao());
-        return repository.save(categoria);
+        categoria = repository.save(categoria);
+
+        auditoriaService.registrar("CRIAR", "Categoria", categoria.getId(), categoria.getNome());
+        return categoria;
     }
 
     public Categoria atualizar(Long id, CategoriaRequest request) {
@@ -47,7 +53,10 @@ public class CategoriaService {
 
         categoria.setNome(request.getNome());
         categoria.setDescricao(request.getDescricao());
-        return repository.save(categoria);
+        categoria = repository.save(categoria);
+
+        auditoriaService.registrar("ATUALIZAR", "Categoria", categoria.getId(), categoria.getNome());
+        return categoria;
     }
 
     public void excluir(Long id) {
@@ -55,6 +64,7 @@ public class CategoriaService {
         try {
             repository.delete(categoria);
             repository.flush();
+            auditoriaService.registrar("EXCLUIR", "Categoria", id, categoria.getNome());
         } catch (DataIntegrityViolationException e) {
             throw new ResponseStatusException(CONFLICT,
                     "Não é possível excluir esta categoria: existem quizzes vinculados a ela. " +

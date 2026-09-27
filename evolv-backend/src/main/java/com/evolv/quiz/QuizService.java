@@ -1,5 +1,6 @@
 package com.evolv.quiz;
 
+import com.evolv.auditoria.AuditoriaService;
 import com.evolv.categoria.Categoria;
 import com.evolv.categoria.CategoriaRepository;
 import com.evolv.quiz.dto.AlternativaRequest;
@@ -18,10 +19,13 @@ public class QuizService {
 
     private final QuizRepository quizRepository;
     private final CategoriaRepository categoriaRepository;
+    private final AuditoriaService auditoriaService;
 
-    public QuizService(QuizRepository quizRepository, CategoriaRepository categoriaRepository) {
+    public QuizService(QuizRepository quizRepository, CategoriaRepository categoriaRepository,
+                        AuditoriaService auditoriaService) {
         this.quizRepository = quizRepository;
         this.categoriaRepository = categoriaRepository;
+        this.auditoriaService = auditoriaService;
     }
 
     public List<Quiz> listarTodos() {
@@ -51,6 +55,9 @@ public class QuizService {
 
         for (QuestaoRequest questaoRequest : request.getQuestoes()) {
             Questao questao = new Questao(questaoRequest.getEnunciado());
+            if (questaoRequest.getOrigem() != null && !questaoRequest.getOrigem().isBlank()) {
+                questao.setOrigem(questaoRequest.getOrigem().toUpperCase());
+            }
             for (AlternativaRequest alternativaRequest : questaoRequest.getAlternativas()) {
                 questao.adicionarAlternativa(
                         new Alternativa(alternativaRequest.getTexto(), alternativaRequest.isCorreta()));
@@ -58,12 +65,15 @@ public class QuizService {
             quiz.adicionarQuestao(questao);
         }
 
-        return quizRepository.save(quiz);
+        quiz = quizRepository.save(quiz);
+        auditoriaService.registrar("CRIAR", "Quiz", quiz.getId(), quiz.getTitulo());
+        return quiz;
     }
 
     public void excluir(Long id) {
         Quiz quiz = buscarPorId(id);
         quizRepository.delete(quiz);
+        auditoriaService.registrar("EXCLUIR", "Quiz", id, quiz.getTitulo());
     }
 
     private void validarRegrasDeNegocio(QuizRequest request) {

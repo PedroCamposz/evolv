@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthBrandPanel from "../components/AuthBrandPanel.jsx";
+import { authApi, sessao } from "../services/api.js";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -11,6 +12,7 @@ export default function Register() {
     senha: "",
     confirmarSenha: "",
   });
+  const [aceitouTermos, setAceitouTermos] = useState(false);
   const [erro, setErro] = useState("");
   const [carregando, setCarregando] = useState(false);
 
@@ -27,19 +29,24 @@ export default function Register() {
       return;
     }
 
+    if (!aceitouTermos) {
+      setErro("É necessário aceitar os Termos de Uso e a Política de Privacidade.");
+      return;
+    }
+
     setCarregando(true);
     try {
-      // TODO: substituir pela chamada real à API (Spring Boot)
-      // await fetch("http://localhost:8080/api/auth/cadastro", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify({ ...form, perfil }),
-      // });
-
-      await new Promise((r) => setTimeout(r, 600));
-      navigate("/login");
+      const resposta = await authApi.registrar({
+        nome: form.nome,
+        email: form.email,
+        senha: form.senha,
+        perfil,
+        aceitouTermos,
+      });
+      sessao.salvar(resposta);
+      navigate("/dashboard");
     } catch (err) {
-      setErro("Não foi possível concluir o cadastro. Tente novamente.");
+      setErro(err.message || "Não foi possível concluir o cadastro. Tente novamente.");
     } finally {
       setCarregando(false);
     }
@@ -68,6 +75,13 @@ export default function Register() {
               onClick={() => setPerfil("PROFESSOR")}
             >
               Sou professor
+            </button>
+            <button
+              type="button"
+              className={perfil === "ADMIN" ? "active" : ""}
+              onClick={() => setPerfil("ADMIN")}
+            >
+              Sou admin
             </button>
           </div>
 
@@ -131,6 +145,29 @@ export default function Register() {
               {erro}
             </p>
           )}
+
+          <label
+            style={{
+              display: "flex",
+              gap: 8,
+              alignItems: "flex-start",
+              fontSize: 13,
+              color: "var(--color-text-muted)",
+              marginBottom: 18,
+            }}
+          >
+            <input
+              type="checkbox"
+              style={{ width: "auto", marginTop: 2 }}
+              checked={aceitouTermos}
+              onChange={(e) => setAceitouTermos(e.target.checked)}
+              required
+            />
+            <span>
+              Li e aceito os <Link to="/termos">Termos de Uso</Link> e a{" "}
+              <Link to="/politica-privacidade">Política de Privacidade</Link>.
+            </span>
+          </label>
 
           <button className="btn btn-primary btn-block" type="submit" disabled={carregando}>
             {carregando ? "Criando conta..." : "Criar conta"}

@@ -27,6 +27,15 @@ public class Questao {
     @JsonManagedReference
     private List<Alternativa> alternativas = new ArrayList<>();
 
+    /**
+     * Procedencia da questao: "MANUAL" (criada pelo professor, padrao) ou
+     * "OPENTDB" (importada da Open Trivia Database). Usada apenas para
+     * diferenciacao/exibicao - a questao funciona normalmente em ambos os
+     * casos.
+     */
+    @Column(length = 20)
+    private String origem = "MANUAL";
+
     public Questao() {
     }
 
@@ -69,5 +78,13 @@ public class Questao {
 
     public void setAlternativas(List<Alternativa> alternativas) {
         this.alternativas = alternativas;
+    }
+
+    public String getOrigem() {
+        return origem;
+    }
+
+    public void setOrigem(String origem) {
+        this.origem = origem;
     }
 }

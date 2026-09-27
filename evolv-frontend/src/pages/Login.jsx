@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthBrandPanel from "../components/AuthBrandPanel.jsx";
+import { authApi, sessao } from "../services/api.js";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -18,20 +19,11 @@ export default function Login() {
     setCarregando(true);
 
     try {
-      // TODO: substituir pela chamada real à API (Spring Boot)
-      // const res = await fetch("http://localhost:8080/api/auth/login", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify(form),
-      // });
-      // if (!res.ok) throw new Error("Credenciais inválidas");
-      // const data = await res.json();
-      // localStorage.setItem("evolv_token", data.token);
-
-      await new Promise((r) => setTimeout(r, 600));
+      const resposta = await authApi.login(form);
+      sessao.salvar(resposta);
       navigate("/dashboard");
     } catch (err) {
-      setErro("E-mail ou senha inválidos. Tente novamente.");
+      setErro(err.message || "E-mail ou senha inválidos. Tente novamente.");
     } finally {
       setCarregando(false);
     }

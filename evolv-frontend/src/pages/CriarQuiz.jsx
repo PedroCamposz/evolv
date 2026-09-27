@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { Plus, Trash2, CheckCircle2 } from "lucide-react";
+import { Plus, Trash2, CheckCircle2, Download } from "lucide-react";
 import Sidebar from "../components/Sidebar.jsx";
-import { categoriasApi, quizzesApi } from "../services/api.js";
+import ImportarQuestoesOpenTdb from "../components/ImportarQuestoesOpenTdb.jsx";
+import { categoriasApi, quizzesApi, sessao } from "../services/api.js";
 
 function novaAlternativa() {
   return { texto: "", correta: false };
@@ -21,6 +22,12 @@ export default function CriarQuiz() {
   const [erro, setErro] = useState("");
   const [sucesso, setSucesso] = useState("");
   const [salvando, setSalvando] = useState(false);
+  const [importModalAberto, setImportModalAberto] = useState(false);
+
+  // Importação de questões da API externa (OpenTDB) é restrita a
+  // professor/admin, espelhando a regra já aplicada no back-end.
+  const usuario = sessao.getUsuario();
+  const podeImportar = usuario?.perfil === "PROFESSOR" || usuario?.perfil === "ADMIN";
 
   useEffect(() => {
     categoriasApi
@@ -75,6 +82,27 @@ export default function CriarQuiz() {
     const copia = [...questoes];
     copia[qIndex].alternativas = copia[qIndex].alternativas.filter((_, i) => i !== aIndex);
     setQuestoes(copia);
+  }
+
+  function questaoEstaVazia(questao) {
+    return (
+      questao.enunciado.trim() === "" &&
+      questao.alternativas.every((alt) => alt.texto.trim() === "")
+    );
+  }
+
+  function handleImportarQuestoes(questoesImportadas) {
+    if (questoesImportadas.length === 0) return;
+
+    // Se o formulário só tem a primeira questão em branco (estado inicial),
+    // substitui em vez de deixar uma questão vazia sobrando no meio.
+    if (questoes.length === 1 && questaoEstaVazia(questoes[0])) {
+      setQuestoes(questoesImportadas);
+    } else {
+      setQuestoes([...questoes, ...questoesImportadas]);
+    }
+    setSucesso("");
+    setErro("");
   }
 
   function limparFormulario() {
@@ -168,9 +196,22 @@ export default function CriarQuiz() {
           </div>
 
           <div className="panel">
-            <h3>Questões</h3>
+            <div className="question-card-header" style={{ marginBottom: 0 }}>
+              <h3>Questões</h3>
+              {podeImportar && (
+                <button
+                  type="button"
+                  className="btn btn-secondary btn-sm"
+                  onClick={() => setImportModalAberto(true)}
+                >
+                  <Download size={14} style={{ marginRight: 6, verticalAlign: -2 }} />
+                  Importar questões da API
+                </button>
+              )}
+            </div>
             <p className="panel-sub" style={{ marginBottom: 16 }}>
-              Marque qual alternativa é a correta em cada questão.
+              Marque qual alternativa é a correta em cada questão. Você também pode importar
+              questões prontas da Open Trivia Database e depois editá-las como preferir.
             </p>
 
             {questoes.map((questao, qIndex) => (
@@ -266,6 +307,12 @@ export default function CriarQuiz() {
           </button>
         </form>
       </main>
+
+      <ImportarQuestoesOpenTdb
+        aberto={importModalAberto}
+        onFechar={() => setImportModalAberto(false)}
+        onImportar={handleImportarQuestoes}
+      />
     </div>
   );
 }

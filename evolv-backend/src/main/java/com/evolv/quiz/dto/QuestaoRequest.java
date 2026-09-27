@@ -15,6 +15,12 @@ public class QuestaoRequest {
     @Valid
     private List<AlternativaRequest> alternativas;
 
+    /**
+     * Opcional. "OPENTDB" quando a questão veio da importação da Open
+     * Trivia Database; se não informado, é tratada como "MANUAL".
+     */
+    private String origem;
+
     public String getEnunciado() {
         return enunciado;
     }
@@ -29,5 +35,13 @@ public class QuestaoRequest {
 
     public void setAlternativas(List<AlternativaRequest> alternativas) {
         this.alternativas = alternativas;
+    }
+
+    public String getOrigem() {
+        return origem;
+    }
+
+    public void setOrigem(String origem) {
+        this.origem = origem;
     }
 }

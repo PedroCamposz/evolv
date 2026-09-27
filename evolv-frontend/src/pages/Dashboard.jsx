@@ -1,6 +1,7 @@
 import { Flame, ListChecks, Trophy, Target, FileQuestion } from "lucide-react";
 import Sidebar from "../components/Sidebar.jsx";
 import StatCard from "../components/StatCard.jsx";
+import { sessao } from "../services/api.js";
 
 const categorias = [
   { nome: "Matemática", acerto: 78, cor: "var(--color-success)" },
@@ -23,6 +24,11 @@ const ranking = [
 ];
 
 export default function Dashboard() {
+  const usuario = sessao.getUsuario();
+  // Usa só o primeiro nome (ex: "Ana Pereira" -> "Ana"); se por algum
+  // motivo não houver usuário na sessão, cai num texto neutro.
+  const primeiroNome = usuario?.nome?.trim().split(" ")[0] || "visitante";
+
   return (
     <div className="dash-shell">
       <Sidebar />
@@ -30,7 +36,7 @@ export default function Dashboard() {
       <main className="dash-main">
         <div className="dash-topbar">
           <div>
-            <h1>Olá, Ana 👋</h1>
+            <h1>Olá, {primeiroNome} 👋</h1>
             <p className="dash-topbar-sub">Aqui está o seu progresso desta semana.</p>
           </div>
 
