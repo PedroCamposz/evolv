@@ -1,0 +1,4 @@
+evolv-backend/target/
+evolv-frontend/node_modules/
+evolv-frontend/dist/
+.env
