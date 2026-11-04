@@ -6,13 +6,26 @@ const BASE_URL =
 const TOKEN_KEY = "evolv_token";
 const USUARIO_KEY = "evolv_usuario";
 
+// sessionStorage e separado por aba: cada aba pode ficar logada com um
+// usuario diferente (ex.: aluno numa aba e admin em outra) sem uma trocar o
+// login da outra, como acontecia com o localStorage, que e compartilhado.
+const armazenamento = window.sessionStorage;
+
+// Remove o login salvo pela versao anterior, que usava localStorage.
+try {
+  localStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem(USUARIO_KEY);
+} catch {
+  // navegador sem acesso ao storage: nada a limpar
+}
+
 // ---- Sessão (token JWT) ----
 export const sessao = {
-  getToken: () => localStorage.getItem(TOKEN_KEY),
-  getUsuario: () => JSON.parse(localStorage.getItem(USUARIO_KEY) || "null"),
+  getToken: () => armazenamento.getItem(TOKEN_KEY),
+  getUsuario: () => JSON.parse(armazenamento.getItem(USUARIO_KEY) || "null"),
   salvar: (authResponse) => {
-    localStorage.setItem(TOKEN_KEY, authResponse.token);
-    localStorage.setItem(
+    armazenamento.setItem(TOKEN_KEY, authResponse.token);
+    armazenamento.setItem(
       USUARIO_KEY,
       JSON.stringify({
         id: authResponse.usuarioId,
@@ -26,15 +39,15 @@ export const sessao = {
       })
     );
   },
-  precisaTrocarSenha: () => !!JSON.parse(localStorage.getItem(USUARIO_KEY) || "null")?.trocarSenha,
+  precisaTrocarSenha: () => !!JSON.parse(armazenamento.getItem(USUARIO_KEY) || "null")?.trocarSenha,
   limpar: () => {
-    localStorage.removeItem(TOKEN_KEY);
-    localStorage.removeItem(USUARIO_KEY);
+    armazenamento.removeItem(TOKEN_KEY);
+    armazenamento.removeItem(USUARIO_KEY);
   },
-  estaLogado: () => !!localStorage.getItem(TOKEN_KEY),
+  estaLogado: () => !!armazenamento.getItem(TOKEN_KEY),
   atualizarPerfil: (perfil) => {
-    const u = JSON.parse(localStorage.getItem(USUARIO_KEY) || "null");
-    if (u) localStorage.setItem(USUARIO_KEY, JSON.stringify({ ...u, perfil }));
+    const u = JSON.parse(armazenamento.getItem(USUARIO_KEY) || "null");
+    if (u) armazenamento.setItem(USUARIO_KEY, JSON.stringify({ ...u, perfil }));
   },
 };
 
