@@ -132,7 +132,7 @@ public class OpenTdbService {
         List<CategoriaOpenTdbDTO> categorias = new ArrayList<>();
         for (OpenTdbCategoryItem item : resposta.getCategorias()) {
             String nomeOriginal = HtmlUtils.htmlUnescape(item.getName());
-            String nomeTraduzido = traducaoService.traduzirParaPtBr(nomeOriginal);
+            String nomeTraduzido = traducaoService.traduzirCategoria(nomeOriginal);
             categorias.add(new CategoriaOpenTdbDTO(item.getId(), nomeTraduzido));
         }
 
@@ -222,7 +222,7 @@ public class OpenTdbService {
 
         String categoriaOriginal = HtmlUtils.htmlUnescape(bruta.getCategory());
         String categoriaTraduzida = categoriasTraduzidas.computeIfAbsent(
-                categoriaOriginal, traducaoService::traduzirParaPtBr);
+                categoriaOriginal, traducaoService::traduzirCategoria);
 
         String respostaCorretaOriginal = HtmlUtils.htmlUnescape(bruta.getCorrectAnswer());
         String respostaCorreta = traducaoService.traduzirParaPtBr(respostaCorretaOriginal);
